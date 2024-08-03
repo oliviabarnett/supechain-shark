@@ -18,13 +18,6 @@ import (
 	"github.com/joho/godotenv"
 )
 
-const (
-	sourceRpcUrl       = ""
-	destRpcUrl         = ""
-	sourceChainId      = 10   // Optimism
-	destinationChainId = 8453 // Base
-)
-
 type Chain struct {
 	ChainId uint64
 	Name    string
@@ -78,14 +71,10 @@ func shouldProcessBlock(sourceStartBlock *big.Int, sourceLatestBlock *big.Int) b
 }
 
 func decodeExecutingMessage(messageLog *types.Log) (*Identifier, error) {
-	// 1. Decode log.Data
 	var identifier Identifier
 	if err := rlp.Decode(bytes.NewReader(messageLog.Data), &identifier); err != nil {
 		return nil, err
 	}
-
-	// 2. Decode the identifier and rlp.Decode(identifier) --> *Identifier
-	// The second argument returned is the data from: SentMessage(data)
 	return &identifier, nil
 }
 
